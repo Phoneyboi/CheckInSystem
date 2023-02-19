@@ -7,11 +7,11 @@ import csv
 import datetime
 import streamlit as st
 
-excel = r"C:\Hutch_Test\export-20230201-222739.csv"
-txt = r'C:\Hutch_Test\emailLineTest.txt'
+csv_file = r"C:\Hutch_Test\export-20230214-204227.csv"
+txt_file = r'C:\Hutch_Test\emailLineTest.txt'
 
 
-def read_from_excel(excel_file):
+def read_from_csv(excel_file):
     data = open(excel_file, encoding="utf-8")
     csv_data = csv.reader(data)
     data_lines = list(csv_data)
@@ -28,7 +28,7 @@ def read_from_txt(text_file, user_list):
 
 
 def write_txt_file(line_with_email):
-    with open(txt, 'a') as file:
+    with open(txt_file, 'a') as file:
         file.write('\n')
         file.write(line_with_email)
     file.close()
@@ -40,30 +40,33 @@ def timestamp():
 
 
 def streamlit():
-    lines = read_from_excel(excel)
+    lines = read_from_csv(csv_file)
 
     # Title
-    st.title('Conquer Check-In')
+    st.header('CONQUER CHECK-IN')
 
     # Email
-    streamlit_email = st.text_input('Email')
+    streamlit_email = st.text_input("EMAIL")
+
     if streamlit_email:
         for line in lines:  # Parses each line in CSV
-            if line[3] == streamlit_email:  # Finds line by email and prints SubscriptionType
+            if line[3] == streamlit_email:  # Finds line by email
                 break
         else:
-            st.write('Email does not match with active user profile. Try another.')
+            st.write('Email does not match with active user profile.')
+            st.write('Please try another or ask to have your email added to our database.')
 
     # Class options
-    classes = ['5:30AM', '6:30AM', '8:30AM', '12:00PM', '4:30PM', '5:30PM']
-    option = st.selectbox('Which class are you attending?',
+    classes = ['5:30AM', '6:30AM', '8:30AM', '12:00PM', '4:30PM', '5:30PM', '8:00AM - SATURDAY', '9:15AM - SATURDAY']
+    option = st.selectbox('CLASS',
                           classes)
 
     # Check-In
-    checkin = st.button('Click Here to Check In')
+    checkin = st.button('CHECK-IN')
     if checkin:
         write_txt_file(option + ',' + timestamp() + ',' + streamlit_email)
-        st.write('Thank you for checking in!')
+        st.write('THANK YOU FOR CHECKING IN!')
+        st.write('YOU CAN NOW CLOSE THIS BROWSER.')
 
 
 # Press the green button in the gutter to run the script.
